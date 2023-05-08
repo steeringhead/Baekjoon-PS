@@ -36,14 +36,19 @@ int main() {
 	
 	sort(dataList.begin(), dataList.end());
 
-	int chkEnd = dataList[0].end;	
+	int chkEnd = dataList[0].end;
+	int chkIdx = 1;
 	int totalNum = 1;
 
-	for (int i = 1; i < N; i++) {
-		if (dataList[i].start >= chkEnd) {
-			chkEnd = dataList[i].end;
+	while (chkIdx < N) {
+		if (dataList[chkIdx].start >= chkEnd) {
+			chkEnd = dataList[chkIdx].end;
 			totalNum++;
-		}		
+            chkIdx++;
+		}
+		else {
+			chkIdx++;
+		}
 	}
 
 	cout << totalNum << '\n';

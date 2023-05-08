@@ -1,35 +1,50 @@
-#include<iostream>
-#include<algorithm>
-#include<vector>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-int main()
+
+struct Data
 {
-	int N, end, begin;
-
-	vector<pair<int, int>> schedule;
-
-	cin >> N ;
-
-	for (int i = 0; i < N; i++)
-	{
-		cin >> begin >> end;
-		schedule.push_back(make_pair(end, begin));
-	}
-	
-	sort(schedule.begin(), schedule.end());
-	
-	int time = schedule[0].first;
-	int count = 1;
-	for (int i = 1 ;i < N; i++) 
-	{
-		if (time <= schedule[i].second )
-		{
-			count++;
-			time = schedule[i].first;
-		}
+	int start;
+	int end;
+	Data(int a, int b) {
+		start = a;
+		end = b;
 	}
 
-	cout << count;
+	bool operator<(const Data& data) const {
+		return end != data.end ? end < data.end : start < data.start;
+	}
+	
+};
+
+vector<Data> dataList;
+
+int main() {
+	int N;
+	cin >> N;
+
+	
+	for (int i = 0; i < N; i++) {
+		int a, b;
+		cin >> a >> b;
+		Data tmp(a, b);
+		dataList.push_back(tmp);
+	}
+	
+	sort(dataList.begin(), dataList.end());
+
+	int chkEnd = dataList[0].end;	
+	int totalNum = 1;
+
+	for (int i = 1; i < N; i++) {
+		if (dataList[i].start >= chkEnd) {
+			chkEnd = dataList[i].end;
+			totalNum++;
+		}		
+	}
+
+	cout << totalNum << '\n';
 }

@@ -26,7 +26,7 @@ int main() {
 
 	int curPrice = price[1];
 	int curIdx = 2;
-	int total = 0;
+	long long total = 0;
 
 	while (curIdx <= N) {
 		if (curPrice >= price[curIdx]) {

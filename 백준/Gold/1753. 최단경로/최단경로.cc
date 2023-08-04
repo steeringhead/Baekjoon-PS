@@ -1,70 +1,74 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <algorithm>
+
+#define INF 100000000
+#define MAX 20001
 
 using namespace std;
 
-const int maxV = 20001;
-const int maxDistance = 1000000000;
+vector<pair<int,int>> adj[MAX];
+int dist[MAX];
 
-bool cmp(const pair<int, int>& a, const pair<int, int>& b) {
-	return a.first > b.first;
+bool cmp(const pair<int,int>& a, const pair<int,int>& b)
+{
+	return a.second > b.second;
 }
 
+void dijkstra(int s)
+{
+	dist[s] = 0;
+	priority_queue<pair<int, int>,vector<pair<int,int>>, decltype(&cmp)> pq(&cmp);
 
-void dijkstra(int start, vector<vector<pair<int, int>>> vec , vector<int>& dist) {
-	priority_queue<pair<int, int>,vector<pair<int,int>>,decltype(&cmp)> pq(&cmp);
-	dist[start] = 0;	
+	pq.push(make_pair(s, 0));
 
-	pq.push(make_pair(0, start));
-
-	while (!pq.empty()) {
-		auto cur = pq.top();		
+	while (pq.empty() == false)
+	{
+		auto cur = pq.top();
 		pq.pop();
 
-		if (dist[cur.second] < cur.first) continue;
-
-		for (int i = 0; i < vec[cur.second].size(); i++) {
-			
-			int node = vec[cur.second][i].first;
-			int distance = vec[cur.second][i].second + cur.first;
-			if (distance < dist[node]) {
-				dist[node] = distance;
-				pq.push(make_pair(distance, node));
+		if (cur.second > dist[cur.first])
+			continue;
+		
+		for (int i = 0; i < adj[cur.first].size(); i++)
+		{
+			auto now = adj[cur.first][i];
+			if (now.second + cur.second < dist[now.first])
+			{
+				dist[now.first] = now.second + cur.second;
+				pq.push(make_pair(now.first, cur.second + now.second));
 			}
-
 		}
 	}
-	
 }
 
-int main() {
-	int start;
-	int V, E;
 
-	cin >> V >> E;
-	cin >> start;
-
-	vector<vector<pair<int, int>>> adjacent(V+1);
+int main()
+{
+	int V, E, start;
+	cin >> V >> E >> start;
 	
-	vector<int> dist(V + 1);
-	
-	for (int i = 1; i <= V; i++) {
-		dist[i] = maxDistance;
+	for (int i = 1; i <= V; i++)
+	{
+		dist[i] = INF;
 	}
-	
 
-	for (int i = 0; i < E; i++) {
+	for (int i = 0; i < E; i++)
+	{
 		int a, b, c;
 		cin >> a >> b >> c;
-		adjacent[a].push_back(make_pair(b, c));
+		adj[a].push_back(make_pair(b, c));
 	}
+	
 
-	dijkstra(start,adjacent,dist);
+	dijkstra(start);
 
-	for (int i = 1; i <= V; i++) {
-		if (dist[i] != maxDistance) cout << dist[i] << '\n';
-		else cout << "INF" << '\n';
+	for (int i = 1; i <= V; i++)
+	{
+		if (dist[i] == INF)
+			cout << "INF" << '\n';
+		else
+			cout << dist[i] << '\n';
+
 	}
 }

@@ -70,6 +70,7 @@ void BFS(int x,int y)
 			{
 				q.push({ nx,ny,cur.cnt+1,true });
 				wallVisited[nx][ny] = 1;
+				visited[nx][ny] = 1;
 				continue;
 			}
 
